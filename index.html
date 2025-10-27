@@ -210,9 +210,7 @@ button:focus {
 }
 </style>
 </head>
-<body style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<!-- Cabeçalho -->
-<header class="hero"><img alt="BBConsultores" src="https://github.com/danilogomes900-jpg/bbconsultores-summit-form/blob/main/pesquisa.png" style="max-width: 100%; height: auto; display: block; margin: 0 auto;"/></header>
+<body style="background-color: white; color: black; font-family: Verdana, sans-serif;"><!-- Cabeçalho --><body style="background-color: white; color: black; font-family: Verdana, sans-serif;"><div id="header" style="text-align: center; margin-bottom: 20px;"><img src="https://raw.githubusercontent.com/danilogomes900-jpg/bbconsultores-summit-form/main/pesquisa.png" style="max-width: 100%; height: auto;"/></div>
 <main class="wrap">
 <section aria-labelledby="tituloForm" class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <h2 id="tituloForm">⭐ Formulário de Avaliação</h2>
@@ -221,11 +219,11 @@ button:focus {
 <div class="grid2" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
 <div style="background-color: white;color: black;font-family: Verdana, sans-serif;">
 <label class="top" for="nome">Nome (opcional)</label>
-<input autocomplete="name" id="nome" name="nome" placeholder="Seu nome" type="text"/>
+<input autocomplete="name" id="nome" name="nome" placeholder="Seu nome" required="" type="text"/>
 </div>
 <div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <label class="top" for="regional">Unidade/Regional (opcional)</label>
-<input id="regional" name="regional" placeholder="Ex.: Agência/UF" type="text"/>
+<input id="regional" name="regional" placeholder="Ex.: Agência/UF" required="" type="text"/>
 </div>
 </div>
 <!-- Linhas de estrelas -->
@@ -236,11 +234,11 @@ button:focus {
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Avaliação geral (1 a 5)" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <!-- Importante: radios em ordem 5→1 com direction:rtl -->
-<input id="geral-5" name="geral" type="radio" value="5"/><label aria-label="5 estrelas" for="geral-5">★</label>
-<input id="geral-4" name="geral" type="radio" value="4"/><label aria-label="4 estrelas" for="geral-4">★</label>
-<input id="geral-3" name="geral" type="radio" value="3"/><label aria-label="3 estrelas" for="geral-3">★</label>
-<input id="geral-2" name="geral" type="radio" value="2"/><label aria-label="2 estrelas" for="geral-2">★</label>
-<input id="geral-1" name="geral" type="radio" value="1"/><label aria-label="1 estrela" for="geral-1">★</label>
+<input id="geral-5" name="geral" required="" type="radio" value="5"/><label aria-label="5 estrelas" for="geral-5">★</label>
+<input id="geral-4" name="geral" required="" type="radio" value="4"/><label aria-label="4 estrelas" for="geral-4">★</label>
+<input id="geral-3" name="geral" required="" type="radio" value="3"/><label aria-label="3 estrelas" for="geral-3">★</label>
+<input id="geral-2" name="geral" required="" type="radio" value="2"/><label aria-label="2 estrelas" for="geral-2">★</label>
+<input id="geral-1" name="geral" required="" type="radio" value="1"/><label aria-label="1 estrela" for="geral-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -249,11 +247,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Relevância dos Conteúdos</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Relevância dos conteúdos" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="conteudos-5" name="conteudos" type="radio" value="5"/><label for="conteudos-5">★</label>
-<input id="conteudos-4" name="conteudos" type="radio" value="4"/><label for="conteudos-4">★</label>
-<input id="conteudos-3" name="conteudos" type="radio" value="3"/><label for="conteudos-3">★</label>
-<input id="conteudos-2" name="conteudos" type="radio" value="2"/><label for="conteudos-2">★</label>
-<input id="conteudos-1" name="conteudos" type="radio" value="1"/><label for="conteudos-1">★</label>
+<input id="conteudos-5" name="conteudos" required="" type="radio" value="5"/><label for="conteudos-5">★</label>
+<input id="conteudos-4" name="conteudos" required="" type="radio" value="4"/><label for="conteudos-4">★</label>
+<input id="conteudos-3" name="conteudos" required="" type="radio" value="3"/><label for="conteudos-3">★</label>
+<input id="conteudos-2" name="conteudos" required="" type="radio" value="2"/><label for="conteudos-2">★</label>
+<input id="conteudos-1" name="conteudos" required="" type="radio" value="1"/><label for="conteudos-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -262,11 +260,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Qualidade dos Palestrantes</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Qualidade dos palestrantes" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="palestrantes-5" name="palestrantes" type="radio" value="5"/><label for="palestrantes-5">★</label>
-<input id="palestrantes-4" name="palestrantes" type="radio" value="4"/><label for="palestrantes-4">★</label>
-<input id="palestrantes-3" name="palestrantes" type="radio" value="3"/><label for="palestrantes-3">★</label>
-<input id="palestrantes-2" name="palestrantes" type="radio" value="2"/><label for="palestrantes-2">★</label>
-<input id="palestrantes-1" name="palestrantes" type="radio" value="1"/><label for="palestrantes-1">★</label>
+<input id="palestrantes-5" name="palestrantes" required="" type="radio" value="5"/><label for="palestrantes-5">★</label>
+<input id="palestrantes-4" name="palestrantes" required="" type="radio" value="4"/><label for="palestrantes-4">★</label>
+<input id="palestrantes-3" name="palestrantes" required="" type="radio" value="3"/><label for="palestrantes-3">★</label>
+<input id="palestrantes-2" name="palestrantes" required="" type="radio" value="2"/><label for="palestrantes-2">★</label>
+<input id="palestrantes-1" name="palestrantes" required="" type="radio" value="1"/><label for="palestrantes-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -275,11 +273,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Organização e Logística</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Organização e logística" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="organizacao-5" name="organizacao" type="radio" value="5"/><label for="organizacao-5">★</label>
-<input id="organizacao-4" name="organizacao" type="radio" value="4"/><label for="organizacao-4">★</label>
-<input id="organizacao-3" name="organizacao" type="radio" value="3"/><label for="organizacao-3">★</label>
-<input id="organizacao-2" name="organizacao" type="radio" value="2"/><label for="organizacao-2">★</label>
-<input id="organizacao-1" name="organizacao" type="radio" value="1"/><label for="organizacao-1">★</label>
+<input id="organizacao-5" name="organizacao" required="" type="radio" value="5"/><label for="organizacao-5">★</label>
+<input id="organizacao-4" name="organizacao" required="" type="radio" value="4"/><label for="organizacao-4">★</label>
+<input id="organizacao-3" name="organizacao" required="" type="radio" value="3"/><label for="organizacao-3">★</label>
+<input id="organizacao-2" name="organizacao" required="" type="radio" value="2"/><label for="organizacao-2">★</label>
+<input id="organizacao-1" name="organizacao" required="" type="radio" value="1"/><label for="organizacao-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -288,11 +286,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Coffee breaks e Almoço</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Coffee Breaks e almoço" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="alimentos-5" name="alimentos" type="radio" value="5"/><label for="alimentos-5">★</label>
-<input id="alimentos-4" name="alimentos" type="radio" value="4"/><label for="alimentos-4">★</label>
-<input id="alimentos-3" name="alimentos" type="radio" value="3"/><label for="alimentos-3">★</label>
-<input id="alimentos-2" name="alimentos" type="radio" value="2"/><label for="alimentos-2">★</label>
-<input id="alimentos-1" name="alimentos" type="radio" value="1"/><label for="alimentos-1">★</label>
+<input id="alimentos-5" name="alimentos" required="" type="radio" value="5"/><label for="alimentos-5">★</label>
+<input id="alimentos-4" name="alimentos" required="" type="radio" value="4"/><label for="alimentos-4">★</label>
+<input id="alimentos-3" name="alimentos" required="" type="radio" value="3"/><label for="alimentos-3">★</label>
+<input id="alimentos-2" name="alimentos" required="" type="radio" value="2"/><label for="alimentos-2">★</label>
+<input id="alimentos-1" name="alimentos" required="" type="radio" value="1"/><label for="alimentos-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -301,11 +299,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Infraestrutura do local</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Infraestrutura do local" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="infra-5" name="infraestrutura" type="radio" value="5"/><label for="infra-5">★</label>
-<input id="infra-4" name="infraestrutura" type="radio" value="4"/><label for="infra-4">★</label>
-<input id="infra-3" name="infraestrutura" type="radio" value="3"/><label for="infra-3">★</label>
-<input id="infra-2" name="infraestrutura" type="radio" value="2"/><label for="infra-2">★</label>
-<input id="infra-1" name="infraestrutura" type="radio" value="1"/><label for="infra-1">★</label>
+<input id="infra-5" name="infraestrutura" required="" type="radio" value="5"/><label for="infra-5">★</label>
+<input id="infra-4" name="infraestrutura" required="" type="radio" value="4"/><label for="infra-4">★</label>
+<input id="infra-3" name="infraestrutura" required="" type="radio" value="3"/><label for="infra-3">★</label>
+<input id="infra-2" name="infraestrutura" required="" type="radio" value="2"/><label for="infra-2">★</label>
+<input id="infra-1" name="infraestrutura" required="" type="radio" value="1"/><label for="infra-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -314,11 +312,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Duração e Ritmo</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Duração e ritmo" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="duracao-5" name="duracao" type="radio" value="5"/><label for="duracao-5">★</label>
-<input id="duracao-4" name="duracao" type="radio" value="4"/><label for="duracao-4">★</label>
-<input id="duracao-3" name="duracao" type="radio" value="3"/><label for="duracao-3">★</label>
-<input id="duracao-2" name="duracao" type="radio" value="2"/><label for="duracao-2">★</label>
-<input id="duracao-1" name="duracao" type="radio" value="1"/><label for="duracao-1">★</label>
+<input id="duracao-5" name="duracao" required="" type="radio" value="5"/><label for="duracao-5">★</label>
+<input id="duracao-4" name="duracao" required="" type="radio" value="4"/><label for="duracao-4">★</label>
+<input id="duracao-3" name="duracao" required="" type="radio" value="3"/><label for="duracao-3">★</label>
+<input id="duracao-2" name="duracao" required="" type="radio" value="2"/><label for="duracao-2">★</label>
+<input id="duracao-1" name="duracao" required="" type="radio" value="1"/><label for="duracao-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -327,11 +325,11 @@ button:focus {
 <div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Materiais e Brindes</strong></div>
 <div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <div aria-label="Materiais e brindes" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="materiais-5" name="materiais" type="radio" value="5"/><label for="materiais-5">★</label>
-<input id="materiais-4" name="materiais" type="radio" value="4"/><label for="materiais-4">★</label>
-<input id="materiais-3" name="materiais" type="radio" value="3"/><label for="materiais-3">★</label>
-<input id="materiais-2" name="materiais" type="radio" value="2"/><label for="materiais-2">★</label>
-<input id="materiais-1" name="materiais" type="radio" value="1"/><label for="materiais-1">★</label>
+<input id="materiais-5" name="materiais" required="" type="radio" value="5"/><label for="materiais-5">★</label>
+<input id="materiais-4" name="materiais" required="" type="radio" value="4"/><label for="materiais-4">★</label>
+<input id="materiais-3" name="materiais" required="" type="radio" value="3"/><label for="materiais-3">★</label>
+<input id="materiais-2" name="materiais" required="" type="radio" value="2"/><label for="materiais-2">★</label>
+<input id="materiais-1" name="materiais" required="" type="radio" value="1"/><label for="materiais-1">★</label>
 </div>
 <span class="value-badge">0/5</span>
 </div>
@@ -339,11 +337,11 @@ button:focus {
 <!-- Perguntas de texto adicionais (logo abaixo de Materiais e Brindes) -->
 <div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <label class="top" for="pratica_regiao">Descreva de forma objetiva como o evento agregou valor às operações da sua empresa na região:</label>
-<textarea id="pratica_regiao" name="pratica_regiao" placeholder="Escreva sua resposta..."></textarea>
+<textarea id="pratica_regiao" name="pratica_regiao" placeholder="Escreva sua resposta..." required=""></textarea>
 </div>
 <div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <label class="top" for="nao_abordado">Há algo essencial que não foi abordado pelos palestrantes do evento?</label>
-<textarea id="nao_abordado" name="nao_abordado" placeholder="Escreva sua resposta..."></textarea>
+<textarea id="nao_abordado" name="nao_abordado" placeholder="Escreva sua resposta..." required=""></textarea>
 </div>
 <!-- NPS -->
 <div class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
@@ -353,17 +351,17 @@ button:focus {
             </label>
 <div aria-label="NPS (0 a 10)" class="nps-options" style="background-color: white; color: black; font-family: Verdana, sans-serif; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; text-align: center;">
 <!-- 0 a 10 -->
-<input id="nps-0" name="nps" type="radio" value="0"/><label for="nps-0">0</label>
-<input id="nps-1" name="nps" type="radio" value="1"/><label for="nps-1">1</label>
-<input id="nps-2" name="nps" type="radio" value="2"/><label for="nps-2">2</label>
-<input id="nps-3" name="nps" type="radio" value="3"/><label for="nps-3">3</label>
-<input id="nps-4" name="nps" type="radio" value="4"/><label for="nps-4">4</label>
-<input id="nps-5" name="nps" type="radio" value="5"/><label for="nps-5">5</label>
-<input id="nps-6" name="nps" type="radio" value="6"/><label for="nps-6">6</label>
-<input id="nps-7" name="nps" type="radio" value="7"/><label for="nps-7">7</label>
-<input id="nps-8" name="nps" type="radio" value="8"/><label for="nps-8">8</label>
-<input id="nps-9" name="nps" type="radio" value="9"/><label for="nps-9">9</label>
-<input id="nps-10" name="nps" type="radio" value="10"/><label for="nps-10">10</label>
+<input id="nps-0" name="nps" required="" type="radio" value="0"/><label for="nps-0">0</label>
+<input id="nps-1" name="nps" required="" type="radio" value="1"/><label for="nps-1">1</label>
+<input id="nps-2" name="nps" required="" type="radio" value="2"/><label for="nps-2">2</label>
+<input id="nps-3" name="nps" required="" type="radio" value="3"/><label for="nps-3">3</label>
+<input id="nps-4" name="nps" required="" type="radio" value="4"/><label for="nps-4">4</label>
+<input id="nps-5" name="nps" required="" type="radio" value="5"/><label for="nps-5">5</label>
+<input id="nps-6" name="nps" required="" type="radio" value="6"/><label for="nps-6">6</label>
+<input id="nps-7" name="nps" required="" type="radio" value="7"/><label for="nps-7">7</label>
+<input id="nps-8" name="nps" required="" type="radio" value="8"/><label for="nps-8">8</label>
+<input id="nps-9" name="nps" required="" type="radio" value="9"/><label for="nps-9">9</label>
+<input id="nps-10" name="nps" required="" type="radio" value="10"/><label for="nps-10">10</label>
 </div>
 <div class="nps-scale" style="background-color: white; color: black; font-family: Verdana, sans-serif; display: flex; justify-content: space-between; padding: 0 20%; text-align: center;">
 <span>Nada provável (0)</span>
@@ -374,11 +372,11 @@ button:focus {
 <!-- Observações gerais -->
 <div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <label class="top" for="observacoes">Observações / Sugestões</label>
-<textarea id="observacoes" name="observacoes" placeholder="Deixe seus comentários aqui..."></textarea>
+<textarea id="observacoes" name="observacoes" placeholder="Deixe seus comentários aqui..." required=""></textarea>
 </div>
 <!-- Ações (somente visuais) -->
 <div class="actions" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<button class="btn" type="button">Enviar</button>
+<button class="btn" type="submit">Enviar</button>
 </div></form>
 </section>
 <footer>© BBConsultores Summit 2025</footer>
@@ -429,4 +427,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
-</body></html>
+</body><form action="https://formspree.io/f/meopezjv" method="POST">
+
+</form></body></html>
