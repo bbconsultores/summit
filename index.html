@@ -221,7 +221,7 @@ button:focus {
 <main class="wrap">
 <section aria-labelledby="tituloForm" class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <h2 id="tituloForm">⭐ Formulário de Avaliação</h2>
-<form action="https://formspree.io/f/meopezjv" aria-describedby="ajudaForm" class="survey" method="POST" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
+<form action="https://defaultffc0be44315f4479b12f56afe6eded.d6.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/35b3ee4996e447c6bfa55eedb0838d17/triggers/manual/paths/invoke?api-version=1" aria-describedby="ajudaForm" class="survey" method="post" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
 <!-- Identificação opcional -->
 <div class="grid2" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
 <div style="background-color: white;color: black;font-family: Verdana, sans-serif;">
@@ -407,27 +407,40 @@ button:focus {
       
     })();
   </script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.querySelector("form");
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const data = new FormData(form);
-        fetch(form.action, {
-          method: form.method,
-          body: data,
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(response => {
-          if (response.ok) {
-            document.body.innerHTML = "<h2>Obrigado por sua contribuição!</h2>";
-          } else {
-            alert("Erro ao enviar o formulário. Tente novamente.");
-          }
-        }).catch(error => {
-          alert("Erro de conexão. Tente novamente.");
-        });
-      });
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form");
+  const btn = document.getElementById("btn");
+
+  btn.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch("https://formspree.io/f/meopezjv", {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        document.body.innerHTML = "<h2 style='text-align:center; margin-top:50px;'>Obrigado por sua contribuição!</h2>";
+        setTimeout(() => {
+          location.reload();
+        }, 3000);
+      } else {
+        alert("Erro ao enviar. Tente novamente.");
+      }
+    })
+    .catch(error => {
+      console.error("Erro:", error);
+      alert("Erro ao enviar. Tente novamente.");
     });
-    </script></body></html>
+  });
+});
+</script>
+
+</body></html>
