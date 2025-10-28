@@ -1,28 +1,26 @@
 <!doctype html>
 <html lang="pt-br">
 <head>
-    <style>
-        body {
-            font-family: Verdana, sans-serif;
-            font-size: 13px;
-            background-color: #eaeaea;
-        }
-    </style>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pesquisa de Satisfação – BBConsultores Summit 2025</title>
+  <link rel="icon" type="image/x-icon" href="icon.ico">
   <style>
     :root { --accent: #0b5cab; --danger: #b00020; --ok: #107c10; --muted:#667085; }
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif; line-height:1.4; margin:0; color:#0f172a; }
+    /* Ajustes de responsividade e box-sizing */
+    *, *::before, *::after { box-sizing: border-box; }
+    img { max-width: 100%; height: auto; }
+
+    body { font-family: Verdana, sans-serif; font-size: 13px; line-height:1.45; margin:0; color:#0f172a; background:#eaeaea; }
     header, main, footer { max-width: 960px; margin: 0 auto; padding: 16px; }
-    h1 { margin: 16px 0 8px; font-size: 1.6rem; }
-    h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--muted); font-weight: 600; }
+    /* Header com imagem responsiva */
+    header img { max-width:100%; height:auto; display:block; border-radius:8px; }
+
+    .card { width:100%; background:#fff; border-radius:12px; box-shadow:0 8px 20px rgba(16,24,40,.08); padding:20px; overflow:hidden; }
     form { display: grid; gap: 16px; }
-    .row { display: grid; gap: 8px; }
+    .row { display: grid; gap: 8px; width:100%; }
     label { font-weight: 600; }
-    input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+    input[type="text"], textarea { width: 100%; max-width:100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: Verdana, sans-serif; }
     textarea { min-height: 96px; resize: vertical; }
     fieldset { border: none; padding: 0; margin: 0; }
     .legend { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
@@ -34,7 +32,6 @@
     .stars label { cursor: pointer; font-size: 28px; color: #cbd5e1; transition: color .15s ease; }
     .stars label::before { content: '★'; }
     .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f59e0b; }
-    .stars:focus-within label { outline: none; }
 
     /* NPS 0-10 */
     .nps { display:flex; flex-wrap:wrap; gap: 8px; align-items:center; }
@@ -46,6 +43,11 @@
     .hint { color: var(--muted); font-size:.9rem; }
     .required::after { content:" *"; color: var(--danger); }
 
+    .progress-wrap{ margin-bottom:12px; }
+    .progress-labels{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:.9rem; color:#475467; }
+    .progress{ width:100%; height:10px; background:#e5e7eb; border-radius:9999px; overflow:hidden; }
+    .progress .bar{ height:100%; background:#0b5cab; width:0%; transition:width .2s ease; }
+
     .actions { display:flex; gap: 12px; align-items:center; }
     button[type="submit"] { background: var(--accent); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-weight:600; cursor:pointer; }
     button[disabled] { opacity: .7; cursor: not-allowed; }
@@ -54,215 +56,242 @@
     .status.ok { display:block; background:#ecfdf5; color:#065f46; border:1px solid #34d399; }
     .status.err { display:block; background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
 
-    footer { color: var(--muted); font-size:.9rem; text-align:center; }
+    footer { background:#004aad; color:#fff; font-size:.9rem; text-align:center; padding:12px 16px; border-radius:8px; }
+
+    /* Overlay de sucesso que cobre toda a tela */
+    #success-overlay{ display:none; position:fixed; inset:0; background:#000; z-index:9999; align-items:center; justify-content:center; }
+    #success-overlay img{ width:100%; height:100%; object-fit:contain; }
+      /* Mantém a barra de progresso sempre visível durante o scroll */
+    .progress-wrap{
+      position: sticky;
+      top: 8px;
+      z-index: 100;
+      background: #fff;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(16,24,40,.06);
+      margin-bottom: 12px;
+    }
+
   </style>
 </head>
 <body>
-<!-- Cabeçalho -->
-<body style="background-color: white; color: black; font-family: Verdana, sans-serif;"><div id="header" style="text-align: center; margin-bottom: 20px;"><img src="https://i.imgur.com/J6BzQxo.png" style="max-width: 100%; height: auto;"/></div>
-<main class="wrap">
-<section aria-labelledby="tituloForm" class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<h2 id="tituloForm">⭐ Formulário de Avaliação</h2>
+  <header>
+    <img src="https://i.imgur.com/J6BzQxo.png" alt="BBConsultores Summit 2025">
+  </header>
 
   <main>
-    <form id="satisfacao-form" action="https://formspree.io/f/meopezjv" method="POST">
-      <!-- Campos opcionais -->
-      <div class="row">
-        <label for="nome">Nome <span class="hint">(opcional)</span></label>
-        <input id="nome" name="nome" type="text" autocomplete="name" />
-      </div>
-      <div class="row">
-        <label for="unidade">Unidade/Regional <span class="hint">(opcional)</span></label>
-        <input id="unidade" name="unidade" type="text" />
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-labels"><span>Progresso</span><span id="progress-percent">0%</span></div>
+        <div class="progress"><div class="bar" id="progress-bar" style="width:0%"></div></div>
       </div>
 
-      <!-- Ratings obrigatórios (1-5) -->
-      <div class="row">
-        <div class="legend"><label class="required">Avaliação Geral</label><span class="counter" data-count="avaliacao_geral">0/5</span></div>
-        <fieldset class="stars" aria-label="Avaliação Geral">
-          <input required type="radio" id="ag-5" name="avaliacao_geral" value="5" />
-          <label for="ag-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="ag-4" name="avaliacao_geral" value="4" />
-          <label for="ag-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="ag-3" name="avaliacao_geral" value="3" />
-          <label for="ag-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="ag-2" name="avaliacao_geral" value="2" />
-          <label for="ag-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="ag-1" name="avaliacao_geral" value="1" />
-          <label for="ag-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Relevância dos Conteúdos</label><span class="counter" data-count="relevancia_conteudos">0/5</span></div>
-        <fieldset class="stars" aria-label="Relevância dos Conteúdos">
-          <input required type="radio" id="rc-5" name="relevancia_conteudos" value="5" />
-          <label for="rc-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="rc-4" name="relevancia_conteudos" value="4" />
-          <label for="rc-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="rc-3" name="relevancia_conteudos" value="3" />
-          <label for="rc-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="rc-2" name="relevancia_conteudos" value="2" />
-          <label for="rc-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="rc-1" name="relevancia_conteudos" value="1" />
-          <label for="rc-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Qualidade dos Palestrantes</label><span class="counter" data-count="qualidade_palestrantes">0/5</span></div>
-        <fieldset class="stars" aria-label="Qualidade dos Palestrantes">
-          <input required type="radio" id="qp-5" name="qualidade_palestrantes" value="5" />
-          <label for="qp-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="qp-4" name="qualidade_palestrantes" value="4" />
-          <label for="qp-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="qp-3" name="qualidade_palestrantes" value="3" />
-          <label for="qp-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="qp-2" name="qualidade_palestrantes" value="2" />
-          <label for="qp-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="qp-1" name="qualidade_palestrantes" value="1" />
-          <label for="qp-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Organização e Logística</label><span class="counter" data-count="organizacao_logistica">0/5</span></div>
-        <fieldset class="stars" aria-label="Organização e Logística">
-          <input required type="radio" id="ol-5" name="organizacao_logistica" value="5" />
-          <label for="ol-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="ol-4" name="organizacao_logistica" value="4" />
-          <label for="ol-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="ol-3" name="organizacao_logistica" value="3" />
-          <label for="ol-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="ol-2" name="organizacao_logistica" value="2" />
-          <label for="ol-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="ol-1" name="organizacao_logistica" value="1" />
-          <label for="ol-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Coffee breaks e Almoço</label><span class="counter" data-count="coffee_almoco">0/5</span></div>
-        <fieldset class="stars" aria-label="Coffee breaks e Almoço">
-          <input required type="radio" id="ca-5" name="coffee_almoco" value="5" />
-          <label for="ca-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="ca-4" name="coffee_almoco" value="4" />
-          <label for="ca-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="ca-3" name="coffee_almoco" value="3" />
-          <label for="ca-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="ca-2" name="coffee_almoco" value="2" />
-          <label for="ca-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="ca-1" name="coffee_almoco" value="1" />
-          <label for="ca-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Infraestrutura do local</label><span class="counter" data-count="infra_local">0/5</span></div>
-        <fieldset class="stars" aria-label="Infraestrutura do local">
-          <input required type="radio" id="il-5" name="infra_local" value="5" />
-          <label for="il-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="il-4" name="infra_local" value="4" />
-          <label for="il-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="il-3" name="infra_local" value="3" />
-          <label for="il-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="il-2" name="infra_local" value="2" />
-          <label for="il-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="il-1" name="infra_local" value="1" />
-          <label for="il-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Duração e Ritmo</label><span class="counter" data-count="duracao_ritmo">0/5</span></div>
-        <fieldset class="stars" aria-label="Duração e Ritmo">
-          <input required type="radio" id="dr-5" name="duracao_ritmo" value="5" />
-          <label for="dr-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="dr-4" name="duracao_ritmo" value="4" />
-          <label for="dr-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="dr-3" name="duracao_ritmo" value="3" />
-          <label for="dr-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="dr-2" name="duracao_ritmo" value="2" />
-          <label for="dr-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="dr-1" name="duracao_ritmo" value="1" />
-          <label for="dr-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <div class="row">
-        <div class="legend"><label class="required">Materiais e Brindes</label><span class="counter" data-count="materiais_brindes">0/5</span></div>
-        <fieldset class="stars" aria-label="Materiais e Brindes">
-          <input required type="radio" id="mb-5" name="materiais_brindes" value="5" />
-          <label for="mb-5" aria-label="5 estrelas"></label>
-          <input type="radio" id="mb-4" name="materiais_brindes" value="4" />
-          <label for="mb-4" aria-label="4 estrelas"></label>
-          <input type="radio" id="mb-3" name="materiais_brindes" value="3" />
-          <label for="mb-3" aria-label="3 estrelas"></label>
-          <input type="radio" id="mb-2" name="materiais_brindes" value="2" />
-          <label for="mb-2" aria-label="2 estrelas"></label>
-          <input type="radio" id="mb-1" name="materiais_brindes" value="1" />
-          <label for="mb-1" aria-label="1 estrela"></label>
-        </fieldset>
-      </div>
-
-      <!-- Perguntas abertas obrigatórias -->
-      <div class="row">
-        <label class="required" for="agregou_valor">Descreva de forma objetiva como o evento agregou valor às operações da sua empresa na região:</label>
-        <textarea id="agregou_valor" name="agregou_valor" required></textarea>
-      </div>
-      <div class="row">
-        <label class="required" for="nao_abordado">Há algo essencial que não foi abordado pelos palestrantes do evento?</label>
-        <textarea id="nao_abordado" name="nao_abordado" required></textarea>
-      </div>
-
-      <!-- NPS obrigatório -->
-      <div class="row">
-        <label class="required">Em uma escala de 0 a 10, qual a probabilidade de você indicar a nossa Consultoria para outros profissionais do ramo?</label>
-        <div class="nps" role="group" aria-label="Probabilidade de indicação">
-          <span class="hint" style="flex-basis:100%">Nada provável (0) — Muito provável (10)</span>
-          <!-- 0..10 -->
-          <div class="opt"><input required type="radio" id="nps-0" name="nps" value="0"><label for="nps-0">0</label></div>
-          <div class="opt"><input type="radio" id="nps-1" name="nps" value="1"><label for="nps-1">1</label></div>
-          <div class="opt"><input type="radio" id="nps-2" name="nps" value="2"><label for="nps-2">2</label></div>
-          <div class="opt"><input type="radio" id="nps-3" name="nps" value="3"><label for="nps-3">3</label></div>
-          <div class="opt"><input type="radio" id="nps-4" name="nps" value="4"><label for="nps-4">4</label></div>
-          <div class="opt"><input type="radio" id="nps-5" name="nps" value="5"><label for="nps-5">5</label></div>
-          <div class="opt"><input type="radio" id="nps-6" name="nps" value="6"><label for="nps-6">6</label></div>
-          <div class="opt"><input type="radio" id="nps-7" name="nps" value="7"><label for="nps-7">7</label></div>
-          <div class="opt"><input type="radio" id="nps-8" name="nps" value="8"><label for="nps-8">8</label></div>
-          <div class="opt"><input type="radio" id="nps-9" name="nps" value="9"><label for="nps-9">9</label></div>
-          <div class="opt"><input type="radio" id="nps-10" name="nps" value="10"><label for="nps-10">10</label></div>
+      <form id="satisfacao-form" action="https://formspree.io/f/meopezjv" method="POST">
+        <!-- Campos opcionais -->
+        <div class="row">
+          <label for="nome">Nome <span class="hint">(opcional)</span></label>
+          <input id="nome" name="nome" type="text" autocomplete="name" />
         </div>
-      </div>
+        <div class="row">
+          <label for="unidade">Unidade/Regional <span class="hint">(opcional)</span></label>
+          <input id="unidade" name="unidade" type="text" />
+        </div>
 
-      <!-- Observações obrigatórias -->
-      <div class="row">
-        <label class="required" for="observacoes">Observações / Sugestões</label>
-        <textarea id="observacoes" name="observacoes" required></textarea>
-      </div>
+        <!-- Ratings obrigatórios (1-5) -->
+        <div class="row">
+          <div class="legend"><label class="required">Avaliação Geral</label><span class="counter" data-count="avaliacao_geral">0/5</span></div>
+          <fieldset class="stars" aria-label="Avaliação Geral">
+            <input required type="radio" id="ag-5" name="avaliacao_geral" value="5" />
+            <label for="ag-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="ag-4" name="avaliacao_geral" value="4" />
+            <label for="ag-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="ag-3" name="avaliacao_geral" value="3" />
+            <label for="ag-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="ag-2" name="avaliacao_geral" value="2" />
+            <label for="ag-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="ag-1" name="avaliacao_geral" value="1" />
+            <label for="ag-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
 
-      <!-- Metadados úteis -->
-      <input type="hidden" name="pagina_origem" id="pagina_origem" />
+        <div class="row">
+          <div class="legend"><label class="required">Relevância dos Conteúdos</label><span class="counter" data-count="relevancia_conteudos">0/5</span></div>
+          <fieldset class="stars" aria-label="Relevância dos Conteúdos">
+            <input required type="radio" id="rc-5" name="relevancia_conteudos" value="5" />
+            <label for="rc-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="rc-4" name="relevancia_conteudos" value="4" />
+            <label for="rc-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="rc-3" name="relevancia_conteudos" value="3" />
+            <label for="rc-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="rc-2" name="relevancia_conteudos" value="2" />
+            <label for="rc-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="rc-1" name="relevancia_conteudos" value="1" />
+            <label for="rc-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
 
-      <div class="actions">
-        <button id="btnEnviar" type="submit">Enviar</button>
-        <span class="hint">* Campos obrigatórios</span>
-      </div>
+        <div class="row">
+          <div class="legend"><label class="required">Qualidade dos Palestrantes</label><span class="counter" data-count="qualidade_palestrantes">0/5</span></div>
+          <fieldset class="stars" aria-label="Qualidade dos Palestrantes">
+            <input required type="radio" id="qp-5" name="qualidade_palestrantes" value="5" />
+            <label for="qp-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="qp-4" name="qualidade_palestrantes" value="4" />
+            <label for="qp-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="qp-3" name="qualidade_palestrantes" value="3" />
+            <label for="qp-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="qp-2" name="qualidade_palestrantes" value="2" />
+            <label for="qp-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="qp-1" name="qualidade_palestrantes" value="1" />
+            <label for="qp-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
 
-      <p id="status" class="status" role="status" aria-live="polite"></p>
-    </form>
+        <div class="row">
+          <div class="legend"><label class="required">Organização e Logística</label><span class="counter" data-count="organizacao_logistica">0/5</span></div>
+          <fieldset class="stars" aria-label="Organização e Logística">
+            <input required type="radio" id="ol-5" name="organizacao_logistica" value="5" />
+            <label for="ol-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="ol-4" name="organizacao_logistica" value="4" />
+            <label for="ol-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="ol-3" name="organizacao_logistica" value="3" />
+            <label for="ol-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="ol-2" name="organizacao_logistica" value="2" />
+            <label for="ol-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="ol-1" name="organizacao_logistica" value="1" />
+            <label for="ol-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
+
+        <div class="row">
+          <div class="legend"><label class="required">Coffee breaks e Almoço</label><span class="counter" data-count="coffee_almoco">0/5</span></div>
+          <fieldset class="stars" aria-label="Coffee breaks e Almoço">
+            <input required type="radio" id="ca-5" name="coffee_almoco" value="5" />
+            <label for="ca-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="ca-4" name="coffee_almoco" value="4" />
+            <label for="ca-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="ca-3" name="coffee_almoco" value="3" />
+            <label for="ca-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="ca-2" name="coffee_almoco" value="2" />
+            <label for="ca-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="ca-1" name="coffee_almoco" value="1" />
+            <label for="ca-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
+
+        <div class="row">
+          <div class="legend"><label class="required">Infraestrutura do local</label><span class="counter" data-count="infra_local">0/5</span></div>
+          <fieldset class="stars" aria-label="Infraestrutura do local">
+            <input required type="radio" id="il-5" name="infra_local" value="5" />
+            <label for="il-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="il-4" name="infra_local" value="4" />
+            <label for="il-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="il-3" name="infra_local" value="3" />
+            <label for="il-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="il-2" name="infra_local" value="2" />
+            <label for="il-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="il-1" name="infra_local" value="1" />
+            <label for="il-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
+
+        <div class="row">
+          <div class="legend"><label class="required">Duração e Ritmo</label><span class="counter" data-count="duracao_ritmo">0/5</span></div>
+          <fieldset class="stars" aria-label="Duração e Ritmo">
+            <input required type="radio" id="dr-5" name="duracao_ritmo" value="5" />
+            <label for="dr-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="dr-4" name="duracao_ritmo" value="4" />
+            <label for="dr-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="dr-3" name="duracao_ritmo" value="3" />
+            <label for="dr-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="dr-2" name="duracao_ritmo" value="2" />
+            <label for="dr-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="dr-1" name="duracao_ritmo" value="1" />
+            <label for="dr-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
+
+        <div class="row">
+          <div class="legend"><label class="required">Materiais e Brindes</label><span class="counter" data-count="materiais_brindes">0/5</span></div>
+          <fieldset class="stars" aria-label="Materiais e Brindes">
+            <input required type="radio" id="mb-5" name="materiais_brindes" value="5" />
+            <label for="mb-5" aria-label="5 estrelas"></label>
+            <input type="radio" id="mb-4" name="materiais_brindes" value="4" />
+            <label for="mb-4" aria-label="4 estrelas"></label>
+            <input type="radio" id="mb-3" name="materiais_brindes" value="3" />
+            <label for="mb-3" aria-label="3 estrelas"></label>
+            <input type="radio" id="mb-2" name="materiais_brindes" value="2" />
+            <label for="mb-2" aria-label="2 estrelas"></label>
+            <input type="radio" id="mb-1" name="materiais_brindes" value="1" />
+            <label for="mb-1" aria-label="1 estrela"></label>
+          </fieldset>
+        </div>
+
+        <!-- Perguntas abertas obrigatórias -->
+        <div class="row">
+          <label class="required" for="agregou_valor">Descreva de forma objetiva como o evento agregou valor às operações da sua empresa na região:</label>
+          <textarea id="agregou_valor" name="agregou_valor" required></textarea>
+        </div>
+        <div class="row">
+          <label class="required" for="nao_abordado">Há algo essencial que não foi abordado pelos palestrantes do evento?</label>
+          <textarea id="nao_abordado" name="nao_abordado" required></textarea>
+        </div>
+
+        <!-- NPS obrigatório -->
+        <div class="row">
+          <label class="required">Em uma escala de 0 a 10, qual a probabilidade de você indicar a nossa Consultoria para outros profissionais do ramo?</label>
+          <div class="nps" role="group" aria-label="Probabilidade de indicação">
+            <span class="hint" style="flex-basis:100%">Nada provável (0) — Muito provável (10)</span>
+            <!-- 0..10 -->
+            <div class="opt"><input required type="radio" id="nps-0" name="nps" value="0"><label for="nps-0">0</label></div>
+            <div class="opt"><input type="radio" id="nps-1" name="nps" value="1"><label for="nps-1">1</label></div>
+            <div class="opt"><input type="radio" id="nps-2" name="nps" value="2"><label for="nps-2">2</label></div>
+            <div class="opt"><input type="radio" id="nps-3" name="nps" value="3"><label for="nps-3">3</label></div>
+            <div class="opt"><input type="radio" id="nps-4" name="nps" value="4"><label for="nps-4">4</label></div>
+            <div class="opt"><input type="radio" id="nps-5" name="nps" value="5"><label for="nps-5">5</label></div>
+            <div class="opt"><input type="radio" id="nps-6" name="nps" value="6"><label for="nps-6">6</label></div>
+            <div class="opt"><input type="radio" id="nps-7" name="nps" value="7"><label for="nps-7">7</label></div>
+            <div class="opt"><input type="radio" id="nps-8" name="nps" value="8"><label for="nps-8">8</label></div>
+            <div class="opt"><input type="radio" id="nps-9" name="nps" value="9"><label for="nps-9">9</label></div>
+            <div class="opt"><input type="radio" id="nps-10" name="nps" value="10"><label for="nps-10">10</label></div>
+          </div>
+        </div>
+
+        <!-- Observações obrigatórias -->
+        <div class="row">
+          <label class="required" for="observacoes">Observações / Sugestões</label>
+          <textarea id="observacoes" name="observacoes" required></textarea>
+        </div>
+
+        <!-- Metadados úteis -->
+        <input type="hidden" name="pagina_origem" id="pagina_origem" />
+
+        <div class="actions">
+          <button id="btnEnviar" type="submit">Enviar</button>
+          <span class="hint">* Campos obrigatórios</span>
+        </div>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
   </main>
 
   <footer>
     © BBConsultores Summit 2025 - Powered by: BBTS
   </footer>
 
+  <!-- Overlay de sucesso em tela cheia -->
+  <div id="success-overlay" aria-hidden="true"></div>
+
   <script>
     (function(){
       const form = document.getElementById('satisfacao-form');
       const btn = document.getElementById('btnEnviar');
       const status = document.getElementById('status');
-      document.getElementById('pagina_origem').value = location.href;
+      const successImageURL = 'https://i.imgur.com/QFVL9Ms.png';
+      const origem = document.getElementById('pagina_origem');
+      if (origem) origem.value = location.href;
 
       // Atualiza contadores 0/5
       function bindStarCounters(){
@@ -272,11 +301,12 @@
           'duracao_ritmo','materiais_brindes'
         ];
         groups.forEach(name => {
-          const radios = [...document.querySelectorAll(`input[name="${name}"]`)];
+          const radios = Array.from(document.querySelectorAll(`input[name="${name}"]`));
           const counter = document.querySelector(`[data-count="${name}"]`);
           if (!radios.length || !counter) return;
           const update = () => {
-            const val = radios.find(r => r.checked)?.value || 0;
+            const checked = radios.find(r => r.checked);
+            const val = checked ? checked.value : 0;
             counter.textContent = `${val}/5`;
           };
           radios.forEach(r => r.addEventListener('change', update));
@@ -284,6 +314,34 @@
         });
       }
       bindStarCounters();
+
+      // Barra de progresso
+      const progressBar = document.getElementById('progress-bar');
+      const progressPercent = document.getElementById('progress-percent');
+      const requiredGroups = [
+        'avaliacao_geral','relevancia_conteudos','qualidade_palestrantes',
+        'organizacao_logistica','coffee_almoco','infra_local','duracao_ritmo','materiais_brindes',
+        'agregou_valor','nao_abordado','nps','observacoes'
+      ];
+      function isGroupFilled(name){
+        if(['agregou_valor','nao_abordado','observacoes'].includes(name)){
+          const el = document.getElementById(name);
+          return !!el && el.value.trim().length > 0;
+        }
+        const radios = Array.from(document.querySelectorAll(`input[name="${name}"]`));
+        return radios.some(r => r.checked);
+      }
+      function updateProgress(){
+        const total = requiredGroups.length;
+        let done = 0;
+        requiredGroups.forEach(n => { if(isGroupFilled(n)) done++; });
+        const pct = Math.round((done/total)*100);
+        if(progressBar) progressBar.style.width = pct + '%';
+        if(progressPercent) progressPercent.textContent = pct + '%';
+      }
+      form.addEventListener('input', updateProgress);
+      form.addEventListener('change', updateProgress);
+      updateProgress();
 
       function setStatus(msg, ok){
         status.textContent = msg;
@@ -293,20 +351,30 @@
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        // validação nativa
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
-        btn.disabled = true; btn.textContent = 'Enviando…'; setStatus('', true); status.className = 'status';
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        btn.disabled = true; btn.textContent = 'Enviando…';
+        setStatus('', true); status.className = 'status';
 
         try {
           const formData = new FormData(form);
           const resp = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
           if (resp.ok) {
             setStatus('✅ Obrigado! Sua resposta foi enviada com sucesso.', true);
+            // 2s depois, projetar somente a imagem em overlay na MESMA página
+            setTimeout(() => {
+              const overlay = document.getElementById('success-overlay');
+              if (overlay) {
+                overlay.innerHTML = `<img src="${successImageURL}" alt="Imagem de confirmação">`;
+                overlay.style.display = 'flex';
+                overlay.setAttribute('aria-hidden','false');
+                document.body.style.overflow = 'hidden'; // evita scroll por trás
+              }
+            }, 2000);
+
             form.reset();
             bindStarCounters();
+            updateProgress();
           } else {
             const data = await resp.json().catch(()=>({}));
             const msg = data && data.errors ? data.errors.map(e=>e.message).join('\n') : 'Não foi possível enviar. Tente novamente.';
