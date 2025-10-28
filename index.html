@@ -11,7 +11,22 @@
     *, *::before, *::after { box-sizing: border-box; }
     img { max-width: 100%; height: auto; }
 
-    body { font-family: Verdana, sans-serif; font-size: 13px; line-height:1.45; margin:0; color:#0f172a; background:#eaeaea; }
+    /* Fundo com imagem + overlay (Opção B) */
+    body {
+      font-family: Verdana, sans-serif; font-size: 13px; line-height:1.45; margin:0; color:#0f172a;
+      background-color: #eaeaea; /* fallback */
+      background-image:
+        linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),
+        url('https://i.imgur.com/0YLf3c3.jpeg');
+      background-size: cover;      /* cobre toda a tela */
+      background-position: center; /* centraliza área de foco */
+      background-repeat: no-repeat;/* não repete */
+      background-attachment: fixed;/* efeito parallax no desktop */
+    }
+    @media (max-width: 768px){
+      body{ background-attachment: scroll; } /* melhora performance em mobile */
+    }
+
     header, main, footer { max-width: 960px; margin: 0 auto; padding: 16px; }
     /* Header com imagem responsiva + sombra */
     header img { max-width:100%; height:auto; display:block; border-radius:8px; box-shadow: 0 8px 20px rgba(16,24,40,.12); }
@@ -34,14 +49,14 @@
     .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f59e0b; }
 
     /* NPS 0-10 */
-    .nps { display:flex; flex-wrap:wrap; gap: 8px; align-items:center; }
+    .nps { display:flex; flex-wrap:wrap; gap: 8px; align-items:center; justify-content:center; }
     .nps .opt { position: relative; display:flex; flex-direction:column; align-items:center; }
     .nps input { position:absolute; opacity:0; }
-    .nps label { display:flex; align-items:center; flex-wrap: wrap; justify-content:center; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; min-width:36px; min-height:36px; text-align:center; cursor:pointer; }
+    .nps label { display:flex; align-items:center; justify-content:center; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; min-width:36px; min-height:36px; text-align:center; cursor:pointer; }
     .nps input:checked + label { background:#0b5cab; color:#fff; border-color:#0b5cab; }
     .nps .nps-note{ font-size:.8rem; color:#667085; margin-top:4px; text-align:center; line-height:1.2; }
 
-    .hint { color: var(--muted); font-size:.9rem; }
+    .hint { color: var(--muted); font-size:.7rem; }
     .required::after { content:" *"; color: var(--danger); }
 
     .progress-wrap{ position: sticky; top: 8px; z-index: 100; background: #fff; padding-top: 8px; padding-bottom: 8px; border-radius: 8px; box-shadow: 0 2px 8px rgba(16,24,40,.06); margin-bottom: 12px; }
@@ -66,7 +81,7 @@
 </head>
 <body>
   <header>
-    <img src="https://i.imgur.com/MM1QhO2.jpeg" alt="BBConsultores Summit 2025">
+    <img src="https://i.imgur.com/J6BzQxo.png" alt="BBConsultores Summit 2025">
   </header>
 
   <main>
@@ -229,9 +244,9 @@
         <!-- NPS obrigatório -->
         <div class="row">
           <label class="required">Em uma escala de 0 a 10, qual a probabilidade de você indicar a nossa Consultoria para outros profissionais do ramo?</label>
-            <div class="nps-note">Nada Provável (0) --- Muito Provável (10)</div>
-          <div class="nps" role="group" aria-label="Probabilidade de indicação">       
-<!-- 0..10 -->
+          <div class="nps" role="group" aria-label="Probabilidade de indicação">
+            <span class="hint" style="flex-basis:100%">Nada provável (0) — Muito provável (10)</span>
+            <!-- 0..10 -->
             <div class="opt"><input required type="radio" id="nps-0" name="nps" value="0"><label for="nps-0">0</label></div>
             <div class="opt"><input type="radio" id="nps-1" name="nps" value="1"><label for="nps-1">1</label></div>
             <div class="opt"><input type="radio" id="nps-2" name="nps" value="2"><label for="nps-2">2</label></div>
@@ -243,9 +258,9 @@
             <div class="opt"><input type="radio" id="nps-8" name="nps" value="8"><label for="nps-8">8</label></div>
             <div class="opt"><input type="radio" id="nps-9" name="nps" value="9"><label for="nps-9">9</label></div>
             <div class="opt"><input type="radio" id="nps-10" name="nps" value="10"><label for="nps-10">10</label></div>
-            </div>
+          </div>
         </div>
-<br>
+
         <!-- Observações obrigatórias -->
         <div class="row">
           <label class="required" for="observacoes">Observações / Sugestões</label>
