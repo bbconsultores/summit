@@ -1,447 +1,315 @@
-<html lang="pt-BR"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Pesquisa de Satisfação – BBConsultores Summit 2025</title>
-<meta content="light dark" name="color-scheme"/>
-<style>
-    /* -----------------------------------------------------------
-       Design tokens
-    ----------------------------------------------------------- */
-    :root{
-      --azul:#465eff;            /* barra superior solicitada */
-      --azul-esc:#3b52e6;        /* variação para hover/contraste */
-      --amarelo:#ffcc00;         /* estrelas */
-      --tx:#0f172a;
-      --tx-2:#475569;
-      --bg:#f6f8fc;
-      --card:#ffffff;
-      --borda:#e5e7eb;
-      --shadow:0 10px 26px rgba(0,0,0,.08);
-      --radius:16px;
-      --radius-sm:12px;
-      --wrap:980px;
-      --focus:#2563eb;
-      --estrela-contorno:#000000;
-      --estrela-vazia-opacidade:.35; /* estrelas "apagadas" */
-    }
-    @media (prefers-color-scheme: light){
-      :root{
-        --tx:#e5e7eb; --tx-2:#a3aab8; --bg:#0b1220; --card:#0e1628; --borda:#1e293b;
-      }
-    }
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pesquisa de Satisfação – BBConsultores Summit 2025</title>
+  <style>
+    :root { --accent: #0b5cab; --danger: #b00020; --ok: #107c10; --muted:#667085; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif; line-height:1.4; margin:0; color:#0f172a; }
+    header, main, footer { max-width: 960px; margin: 0 auto; padding: 16px; }
+    h1 { margin: 16px 0 8px; font-size: 1.6rem; }
+    h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--muted); font-weight: 600; }
+    form { display: grid; gap: 16px; }
+    .row { display: grid; gap: 8px; }
+    label { font-weight: 600; }
+    input[type="text"], textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; }
+    textarea { min-height: 96px; resize: vertical; }
+    fieldset { border: none; padding: 0; margin: 0; }
+    .legend { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .counter { color: var(--muted); font-size: .9rem; }
 
-    /* -----------------------------------------------------------
-       Base
-    ----------------------------------------------------------- */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font:12px/1.55 "Segoe UI", Segoe UI, system-ui, -apple-system, Roboto, Inter, Arial, sans-serif;
-      color:var(--tx);
-      background:var(--bg);
-    }
-    .wrap{max-width:var(--wrap); margin:0 auto; padding:0 16px}
+    /* Estrelas (rating 1-5) */
+    .stars { display: inline-flex; flex-direction: row-reverse; gap: 4px; }
+    .stars input { position: absolute; opacity: 0; }
+    .stars label { cursor: pointer; font-size: 28px; color: #cbd5e1; transition: color .15s ease; }
+    .stars label::before { content: '★'; }
+    .stars input:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f59e0b; }
+    .stars:focus-within label { outline: none; }
 
-    /* -----------------------------------------------------------
-       Hero
-    ----------------------------------------------------------- */
-    header.hero{
-      background:var(--azul);
-      color:#fff;
-      padding:36px 0 26px;
-      box-shadow:var(--shadow);
-    }
-    .hero h1{margin:0 0 6px; font-size:clamp(22px,3.4vw,34px)}
-    .hero .badge{
-      display:inline-flex; align-items:center; gap:8px;
-      background:#fff; color:#111; font-weight:700;
-      border-radius:999px; padding:6px 12px; font-size:12px;
-      margin-bottom:10px;
-      border:1px solid #ffffff66;
-    }
-    .hero .sub{margin:0; color:#eef2ff}
+    /* NPS 0-10 */
+    .nps { display:flex; flex-wrap:wrap; gap: 8px; align-items:center; }
+    .nps .opt { position: relative; }
+    .nps input { position:absolute; opacity:0; }
+    .nps label { display:inline-block; padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; min-width:36px; text-align:center; cursor:pointer; }
+    .nps input:checked + label { background:#0b5cab; color:#fff; border-color:#0b5cab; }
 
-    /* -----------------------------------------------------------
-       Card/Form
-    ----------------------------------------------------------- */
-    main{padding:26px 0 60px}
-    .card{
-      background:var(--card);
-      border:1px solid var(--borda);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .card h2{margin:0 0 10px; font-size:22px}
-    .note{font-size:12px; color:var(--tx-2); margin-top:8px}
+    .hint { color: var(--muted); font-size:.9rem; }
+    .required::after { content:" *"; color: var(--danger); }
 
-    form.survey{display:grid; gap:16px}
-    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-    @media (max-width:720px){ .grid2{grid-template-columns:1fr} }
+    .actions { display:flex; gap: 12px; align-items:center; }
+    button[type="submit"] { background: var(--accent); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-weight:600; cursor:pointer; }
+    button[disabled] { opacity: .7; cursor: not-allowed; }
 
-    label.top{font-weight:600; display:block; margin-bottom:6px}
-    input[type="text"], textarea{
-      width:100%; border:1px solid var(--borda); background:#fff;
-      border-radius:12px; padding:10px; font:inherit; color:inherit;
-    }
-    textarea{min-height:120px; resize:vertical}
-    @media (prefers-color-scheme: light){
-      input[type="text"], textarea{background:#0e1628}
-    }
+    .status { display:none; padding:12px; border-radius:8px; }
+    .status.ok { display:block; background:#ecfdf5; color:#065f46; border:1px solid #34d399; }
+    .status.err { display:block; background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
 
-    /* -----------------------------------------------------------
-       Linhas de avaliação (estrelas acessíveis por radio)
-    ----------------------------------------------------------- */
-    .row{
-      display:grid; gap:12px; align-items:center;
-      grid-template-columns:minmax(210px, 340px) 1fr;
-      padding:10px 0; border-bottom:1px dashed var(--borda);
-    }
-    .row:last-child{border-bottom:none}
-    .label strong{font-weight:700}
-    .hint{font-size:12px; color:var(--tx-2); font-weight:400}
-
-    .rating{
-      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-      background:linear-gradient(180deg,#ffffff, #f9fbff);
-      border:1px solid var(--borda); border-radius:var(--radius-sm);
-      padding:8px 10px;
-    }
-    .value-badge{
-      display:inline-flex; align-items:center; gap:6px;
-      background:#eef2ff; color:#1e293b; border:1px solid var(--borda);
-      padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600;
-    }
-    @media (prefers-color-scheme: light){
-      .value-badge{ background:#10203f; color:#e5e7eb }
-    }
-
-    /* Estrelas (radios 5→1 com direction:rtl) */
-    .stars{
-      display:inline-flex; gap:6px; direction:rtl;
-    }
-    .stars input{ display:none; }
-    .stars label{
-      font-size:18px;
-      cursor:pointer; padding:2px 4px; line-height:1;
-      /* Estrela amarela com contorno preto (via text-shadow) */
-      color:var(--amarelo);
-      text-shadow:
-        -1px -1px 0 var(--estrela-contorno),
-         1px -1px 0 var(--estrela-contorno),
-        -1px  1px 0 var(--estrela-contorno),
-         1px  1px 0 var(--estrela-contorno),
-         0   -2px 0 var(--estrela-contorno),
-         0    2px 0 var(--estrela-contorno),
-        -2px  0   0 var(--estrela-contorno),
-         2px  0   0 var(--estrela-contorno);
-      opacity:var(--estrela-vazia-opacidade);
-      transition:transform .06s ease, opacity .12s ease;
-    }
-    .stars label:hover{ transform:translateY(-1px) scale(1.05); }
-    /* Hover: destaca atual e anteriores */
-    .stars label:hover,
-    .stars label:hover ~ label{ opacity:1; }
-
-    /* Selecionado: estrela ativa e anteriores em opacidade 1 */
-    .stars input:checked ~ label{ opacity:1; }
-
-    /* Foco acessível (no input) */
-    .stars input:focus + label{
-      outline:2px solid var(--focus); outline-offset:3px; border-radius:6px;
-    }
-
-    /* -----------------------------------------------------------
-       NPS (0–10)
-    ----------------------------------------------------------- */
-    .nps-block{
-      display:grid; gap:8px;
-    }
-    .nps-options{
-      display:flex; gap:6px; flex-wrap:wrap;
-    }
-    .nps-options input{ display:none }
-    .nps-options label{
-      min-width:36px; padding:8px 10px; text-align:center; user-select:none;
-      border:1px solid var(--borda); border-radius:10px; cursor:pointer;
-      background:#fff; font-weight:700;
-      transition:transform .06s ease, background .12s ease, border-color .12s ease;
-    }
-    .nps-options label:hover{ transform:translateY(-1px) }
-    .nps-options input:checked + label{
-      background:var(--azul); color:#fff; border-color:var(--azul-esc);
-    }
-    .nps-scale{
-      display:flex; justify-content:space-between; font-size:12px; color:var(--tx-2);
-    }
-
-    /* -----------------------------------------------------------
-       Ações / Rodapé
-    ----------------------------------------------------------- */
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px }
-    .btn{
-      appearance:none; border:none; border-radius:999px; padding:10px 16px;
-      font-weight:700; cursor:pointer; background:#111827; color:#fff;
-      box-shadow:var(--shadow);
-    }
-    .btn.secondary{ background:#334155 }
-    .btn[disabled]{ opacity:.6; cursor:not-allowed }
-
-    footer{margin-top:18px; font-size:12px; color:var(--tx-2); text-align:center}
-  
-button {
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-button:hover {
-    transform: scale(1.05);
-    background-color: #e0e0e0;
-}
-
-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(100, 100, 255, 0.4);
-    transform: scale(1.03);
-}
-</style>
+    footer { color: var(--muted); font-size:.9rem; text-align:center; }
+  </style>
 </head>
-<body style="background-color: white; color: black; font-family: Verdana, sans-serif;">
+<body>
 <!-- Cabeçalho -->
 <body style="background-color: white; color: black; font-family: Verdana, sans-serif;"><div id="header" style="text-align: center; margin-bottom: 20px;"><img src="https://i.imgur.com/J6BzQxo.png" style="max-width: 100%; height: auto;"/></div>
 <main class="wrap">
 <section aria-labelledby="tituloForm" class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 <h2 id="tituloForm">⭐ Formulário de Avaliação</h2>
-<form action="https://formspree.io/f/meopezjv" aria-describedby="ajudaForm" class="survey" method="POST" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
-<!-- Identificação opcional -->
-<div class="grid2" style="background-color: white;color: black;font-family: Verdana, sans-serif;">
-<div style="background-color: white;color: black;font-family: Verdana, sans-serif;">
-<label class="top" for="nome">Nome (opcional)</label>
-<input autocomplete="name" id="nome" name="nome" placeholder="Seu nome" required="required" type="text"/><br>
-</div><br>
-<div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<label class="top" for="regional">Unidade/Regional (opcional)</label>
-<input id="regional" name="regional" placeholder="Ex.: Agência/UF" required="required" type="text"/>
-</div>
-</div>
-<br>
-<!-- Linhas de estrelas -->
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<strong>Avaliação Geral</strong>
-</div>
-<br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Avaliação geral (1 a 5)" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<!-- Importante: radios em ordem 5→1 com direction:rtl -->
-<input id="geral-5" name="geral" required="required" type="radio" value="5"/><label aria-label="5 estrelas" for="geral-5">★</label>
-<input id="geral-4" name="geral" required="required" type="radio" value="4"/><label aria-label="4 estrelas" for="geral-4">★</label>
-<input id="geral-3" name="geral" required="required" type="radio" value="3"/><label aria-label="3 estrelas" for="geral-3">★</label>
-<input id="geral-2" name="geral" required="required" type="radio" value="2"/><label aria-label="2 estrelas" for="geral-2">★</label>
-<input id="geral-1" name="geral" required="required" type="radio" value="1"/><label aria-label="1 estrela" for="geral-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Relevância dos Conteúdos</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Relevância dos conteúdos" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
 
-<input id="conteudos-5" name="conteudos" required="required" type="radio" value="5"/><label for="conteudos-5">★</label>
-<input id="conteudos-4" name="conteudos" required="required" type="radio" value="4"/><label for="conteudos-4">★</label>
-<input id="conteudos-3" name="conteudos" required="required" type="radio" value="3"/><label for="conteudos-3">★</label>
-<input id="conteudos-2" name="conteudos" required="required" type="radio" value="2"/><label for="conteudos-2">★</label>
-<input id="conteudos-1" name="conteudos" required="required" type="radio" value="1"/><label for="conteudos-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Qualidade dos Palestrantes</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Qualidade dos palestrantes" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="palestrantes-5" name="palestrantes" required="required" type="radio" value="5"/><label for="palestrantes-5">★</label>
-<input id="palestrantes-4" name="palestrantes" required="required" type="radio" value="4"/><label for="palestrantes-4">★</label>
-<input id="palestrantes-3" name="palestrantes" required="required" type="radio" value="3"/><label for="palestrantes-3">★</label>
-<input id="palestrantes-2" name="palestrantes" required="required" type="radio" value="2"/><label for="palestrantes-2">★</label>
-<input id="palestrantes-1" name="palestrantes" required="required" type="radio" value="1"/><label for="palestrantes-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Organização e Logística</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Organização e logística" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="organizacao-5" name="organizacao" required="required" type="radio" value="5"/><label for="organizacao-5">★</label>
-<input id="organizacao-4" name="organizacao" required="required" type="radio" value="4"/><label for="organizacao-4">★</label>
-<input id="organizacao-3" name="organizacao" required="required" type="radio" value="3"/><label for="organizacao-3">★</label>
-<input id="organizacao-2" name="organizacao" required="required" type="radio" value="2"/><label for="organizacao-2">★</label>
-<input id="organizacao-1" name="organizacao" required="required" type="radio" value="1"/><label for="organizacao-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Coffee breaks e Almoço</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Coffee Breaks e almoço" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="alimentos-5" name="alimentos" required="required" type="radio" value="5"/><label for="alimentos-5">★</label>
-<input id="alimentos-4" name="alimentos" required="required" type="radio" value="4"/><label for="alimentos-4">★</label>
-<input id="alimentos-3" name="alimentos" required="required" type="radio" value="3"/><label for="alimentos-3">★</label>
-<input id="alimentos-2" name="alimentos" required="required" type="radio" value="2"/><label for="alimentos-2">★</label>
-<input id="alimentos-1" name="alimentos" required="required" type="radio" value="1"/><label for="alimentos-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Infraestrutura do local</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Infraestrutura do local" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="infra-5" name="infraestrutura" required="required" type="radio" value="5"/><label for="infra-5">★</label>
-<input id="infra-4" name="infraestrutura" required="required" type="radio" value="4"/><label for="infra-4">★</label>
-<input id="infra-3" name="infraestrutura" required="required" type="radio" value="3"/><label for="infra-3">★</label>
-<input id="infra-2" name="infraestrutura" required="required" type="radio" value="2"/><label for="infra-2">★</label>
-<input id="infra-1" name="infraestrutura" required="required" type="radio" value="1"/><label for="infra-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Duração e Ritmo</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Duração e ritmo" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="duracao-5" name="duracao" required="required" type="radio" value="5"/><label for="duracao-5">★</label>
-<input id="duracao-4" name="duracao" required="required" type="radio" value="4"/><label for="duracao-4">★</label>
-<input id="duracao-3" name="duracao" required="required" type="radio" value="3"/><label for="duracao-3">★</label>
-<input id="duracao-2" name="duracao" required="required" type="radio" value="2"/><label for="duracao-2">★</label>
-<input id="duracao-1" name="duracao" required="required" type="radio" value="1"/><label for="duracao-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<div class="row" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div class="label" style="background-color: white; color: black; font-family: Verdana, sans-serif;"><strong>Materiais e Brindes</strong></div><br>
-<div class="rating" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-label="Materiais e brindes" class="stars" role="radiogroup" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<input id="materiais-5" name="materiais" required="required" type="radio" value="5"/><label for="materiais-5">★</label>
-<input id="materiais-4" name="materiais" required="required" type="radio" value="4"/><label for="materiais-4">★</label>
-<input id="materiais-3" name="materiais" required="required" type="radio" value="3"/><label for="materiais-3">★</label>
-<input id="materiais-2" name="materiais" required="required" type="radio" value="2"/><label for="materiais-2">★</label>
-<input id="materiais-1" name="materiais" required="required" type="radio" value="1"/><label for="materiais-1">★</label>
-</div>
-<span class="value-badge">0/5</span>
-</div>
-</div>
-<!-- Perguntas de texto adicionais (logo abaixo de Materiais e Brindes) -->
-<div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<label class="top" for="pratica_regiao">Descreva de forma objetiva como o evento agregou valor às operações da sua empresa na região:</label>
-<textarea id="pratica_regiao" name="pratica_regiao" placeholder="Escreva sua resposta..." required="required"></textarea>
-</div>
-<div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<label class="top" for="nao_abordado">Há algo essencial que não foi abordado pelos palestrantes do evento?</label>
-<textarea id="nao_abordado" name="nao_abordado" placeholder="Escreva sua resposta..." required="required"></textarea>
-</div>
-<!-- NPS -->
-<div class="card" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<div aria-labelledby="nps_titulo" class="nps-block" role="group" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<label class="top" for="nps" id="nps_titulo">
-              Em uma escala de 0 a 10, qual a probabilidade de você indicar a nossa Consultoria para outros profissionais do ramo?
-            </label>
-<div aria-label="NPS (0 a 10)" class="nps-options" style="background-color: white; color: black; font-family: Verdana, sans-serif; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 10px; text-align: center;">
-<!-- 0 a 10 -->
-<input id="nps-0" name="nps" required="required" type="radio" value="0"/><label for="nps-0">0</label>
-<input id="nps-1" name="nps" required="required" type="radio" value="1"/><label for="nps-1">1</label>
-<input id="nps-2" name="nps" required="required" type="radio" value="2"/><label for="nps-2">2</label>
-<input id="nps-3" name="nps" required="required" type="radio" value="3"/><label for="nps-3">3</label>
-<input id="nps-4" name="nps" required="required" type="radio" value="4"/><label for="nps-4">4</label>
-<input id="nps-5" name="nps" required="required" type="radio" value="5"/><label for="nps-5">5</label>
-<input id="nps-6" name="nps" required="required" type="radio" value="6"/><label for="nps-6">6</label>
-<input id="nps-7" name="nps" required="required" type="radio" value="7"/><label for="nps-7">7</label>
-<input id="nps-8" name="nps" required="required" type="radio" value="8"/><label for="nps-8">8</label>
-<input id="nps-9" name="nps" required="required" type="radio" value="9"/><label for="nps-9">9</label>
-<input id="nps-10" name="nps" required="required" type="radio" value="10"/><label for="nps-10">10</label>
-</div>
-<div class="nps-scale" style="background-color: white; color: black; font-family: Verdana, sans-serif; display: flex; justify-content: space-between; padding: 0 20%; text-align: center;">
-<span>Nada provável (0)</span>
-<span>Muito provável (10)</span>
-</div>
-</div>
-</div>
-<!-- Observações gerais -->
-<div style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<label class="top" for="observacoes">Observações / Sugestões</label>
-<textarea id="observacoes" name="observacoes" placeholder="Deixe seus comentários aqui..." required="required"></textarea>
-</div>
-<!-- Ações (somente visuais) -->
-<div class="actions" style="background-color: white; color: black; font-family: Verdana, sans-serif;">
-<button class="btn" type="button">Enviar</button>
-</div></form>
-</section>
-<footer>© BBConsultores Summit 2025</footer>
-</main>
-<!-- JS leve só para exibir "X/5" e valor do NPS (sem salvar/enviar) -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const starGroups = document.querySelectorAll(".star-rating");
-  starGroups.forEach(group => {
-    const stars = group.querySelectorAll("input[type='radio']");
-    const counter = group.querySelector(".rating-counter");
-    stars.forEach(star => {
-      star.addEventListener("change", () => {
-        counter.textContent = `${star.value}/5`;
-      });
-    });
-  });
+  <main>
+    <form id="satisfacao-form" action="https://formspree.io/f/meopezjv" method="POST">
+      <!-- Campos opcionais -->
+      <div class="row">
+        <label for="nome">Nome <span class="hint">(opcional)</span></label>
+        <input id="nome" name="nome" type="text" autocomplete="name" />
+      </div>
+      <div class="row">
+        <label for="unidade">Unidade/Regional <span class="hint">(opcional)</span></label>
+        <input id="unidade" name="unidade" type="text" />
+      </div>
 
-  const form = document.querySelector("form");
-  const btn = document.getElementById("btn");
-  if (form && btn) {
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (form.checkValidity()) {
-        const formData = new FormData(form);
-        fetch(form.action, {
-          method: "POST",
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(response => {
-          if (response.ok) {
-            document.body.innerHTML = "<h2 style='text-align:center;'>Obrigado por sua contribuição!</h2>";
-            setTimeout(() => {
-              location.reload();
-            }, 3000);
-          } else {
-            alert("Erro ao enviar. Tente novamente.");
-          }
-        }).catch(() => {
-          alert("Erro de conexão.");
+      <!-- Ratings obrigatórios (1-5) -->
+      <div class="row">
+        <div class="legend"><label class="required">Avaliação Geral</label><span class="counter" data-count="avaliacao_geral">0/5</span></div>
+        <fieldset class="stars" aria-label="Avaliação Geral">
+          <input required type="radio" id="ag-5" name="avaliacao_geral" value="5" />
+          <label for="ag-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="ag-4" name="avaliacao_geral" value="4" />
+          <label for="ag-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="ag-3" name="avaliacao_geral" value="3" />
+          <label for="ag-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="ag-2" name="avaliacao_geral" value="2" />
+          <label for="ag-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="ag-1" name="avaliacao_geral" value="1" />
+          <label for="ag-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Relevância dos Conteúdos</label><span class="counter" data-count="relevancia_conteudos">0/5</span></div>
+        <fieldset class="stars" aria-label="Relevância dos Conteúdos">
+          <input required type="radio" id="rc-5" name="relevancia_conteudos" value="5" />
+          <label for="rc-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="rc-4" name="relevancia_conteudos" value="4" />
+          <label for="rc-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="rc-3" name="relevancia_conteudos" value="3" />
+          <label for="rc-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="rc-2" name="relevancia_conteudos" value="2" />
+          <label for="rc-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="rc-1" name="relevancia_conteudos" value="1" />
+          <label for="rc-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Qualidade dos Palestrantes</label><span class="counter" data-count="qualidade_palestrantes">0/5</span></div>
+        <fieldset class="stars" aria-label="Qualidade dos Palestrantes">
+          <input required type="radio" id="qp-5" name="qualidade_palestrantes" value="5" />
+          <label for="qp-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="qp-4" name="qualidade_palestrantes" value="4" />
+          <label for="qp-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="qp-3" name="qualidade_palestrantes" value="3" />
+          <label for="qp-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="qp-2" name="qualidade_palestrantes" value="2" />
+          <label for="qp-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="qp-1" name="qualidade_palestrantes" value="1" />
+          <label for="qp-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Organização e Logística</label><span class="counter" data-count="organizacao_logistica">0/5</span></div>
+        <fieldset class="stars" aria-label="Organização e Logística">
+          <input required type="radio" id="ol-5" name="organizacao_logistica" value="5" />
+          <label for="ol-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="ol-4" name="organizacao_logistica" value="4" />
+          <label for="ol-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="ol-3" name="organizacao_logistica" value="3" />
+          <label for="ol-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="ol-2" name="organizacao_logistica" value="2" />
+          <label for="ol-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="ol-1" name="organizacao_logistica" value="1" />
+          <label for="ol-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Coffee breaks e Almoço</label><span class="counter" data-count="coffee_almoco">0/5</span></div>
+        <fieldset class="stars" aria-label="Coffee breaks e Almoço">
+          <input required type="radio" id="ca-5" name="coffee_almoco" value="5" />
+          <label for="ca-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="ca-4" name="coffee_almoco" value="4" />
+          <label for="ca-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="ca-3" name="coffee_almoco" value="3" />
+          <label for="ca-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="ca-2" name="coffee_almoco" value="2" />
+          <label for="ca-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="ca-1" name="coffee_almoco" value="1" />
+          <label for="ca-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Infraestrutura do local</label><span class="counter" data-count="infra_local">0/5</span></div>
+        <fieldset class="stars" aria-label="Infraestrutura do local">
+          <input required type="radio" id="il-5" name="infra_local" value="5" />
+          <label for="il-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="il-4" name="infra_local" value="4" />
+          <label for="il-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="il-3" name="infra_local" value="3" />
+          <label for="il-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="il-2" name="infra_local" value="2" />
+          <label for="il-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="il-1" name="infra_local" value="1" />
+          <label for="il-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Duração e Ritmo</label><span class="counter" data-count="duracao_ritmo">0/5</span></div>
+        <fieldset class="stars" aria-label="Duração e Ritmo">
+          <input required type="radio" id="dr-5" name="duracao_ritmo" value="5" />
+          <label for="dr-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="dr-4" name="duracao_ritmo" value="4" />
+          <label for="dr-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="dr-3" name="duracao_ritmo" value="3" />
+          <label for="dr-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="dr-2" name="duracao_ritmo" value="2" />
+          <label for="dr-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="dr-1" name="duracao_ritmo" value="1" />
+          <label for="dr-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="legend"><label class="required">Materiais e Brindes</label><span class="counter" data-count="materiais_brindes">0/5</span></div>
+        <fieldset class="stars" aria-label="Materiais e Brindes">
+          <input required type="radio" id="mb-5" name="materiais_brindes" value="5" />
+          <label for="mb-5" aria-label="5 estrelas"></label>
+          <input type="radio" id="mb-4" name="materiais_brindes" value="4" />
+          <label for="mb-4" aria-label="4 estrelas"></label>
+          <input type="radio" id="mb-3" name="materiais_brindes" value="3" />
+          <label for="mb-3" aria-label="3 estrelas"></label>
+          <input type="radio" id="mb-2" name="materiais_brindes" value="2" />
+          <label for="mb-2" aria-label="2 estrelas"></label>
+          <input type="radio" id="mb-1" name="materiais_brindes" value="1" />
+          <label for="mb-1" aria-label="1 estrela"></label>
+        </fieldset>
+      </div>
+
+      <!-- Perguntas abertas obrigatórias -->
+      <div class="row">
+        <label class="required" for="agregou_valor">Descreva de forma objetiva como o evento agregou valor às operações da sua empresa na região:</label>
+        <textarea id="agregou_valor" name="agregou_valor" required></textarea>
+      </div>
+      <div class="row">
+        <label class="required" for="nao_abordado">Há algo essencial que não foi abordado pelos palestrantes do evento?</label>
+        <textarea id="nao_abordado" name="nao_abordado" required></textarea>
+      </div>
+
+      <!-- NPS obrigatório -->
+      <div class="row">
+        <label class="required">Em uma escala de 0 a 10, qual a probabilidade de você indicar a nossa Consultoria para outros profissionais do ramo?</label>
+        <div class="nps" role="group" aria-label="Probabilidade de indicação">
+          <span class="hint" style="flex-basis:100%">Nada provável (0) — Muito provável (10)</span>
+          <!-- 0..10 -->
+          <div class="opt"><input required type="radio" id="nps-0" name="nps" value="0"><label for="nps-0">0</label></div>
+          <div class="opt"><input type="radio" id="nps-1" name="nps" value="1"><label for="nps-1">1</label></div>
+          <div class="opt"><input type="radio" id="nps-2" name="nps" value="2"><label for="nps-2">2</label></div>
+          <div class="opt"><input type="radio" id="nps-3" name="nps" value="3"><label for="nps-3">3</label></div>
+          <div class="opt"><input type="radio" id="nps-4" name="nps" value="4"><label for="nps-4">4</label></div>
+          <div class="opt"><input type="radio" id="nps-5" name="nps" value="5"><label for="nps-5">5</label></div>
+          <div class="opt"><input type="radio" id="nps-6" name="nps" value="6"><label for="nps-6">6</label></div>
+          <div class="opt"><input type="radio" id="nps-7" name="nps" value="7"><label for="nps-7">7</label></div>
+          <div class="opt"><input type="radio" id="nps-8" name="nps" value="8"><label for="nps-8">8</label></div>
+          <div class="opt"><input type="radio" id="nps-9" name="nps" value="9"><label for="nps-9">9</label></div>
+          <div class="opt"><input type="radio" id="nps-10" name="nps" value="10"><label for="nps-10">10</label></div>
+        </div>
+      </div>
+
+      <!-- Observações obrigatórias -->
+      <div class="row">
+        <label class="required" for="observacoes">Observações / Sugestões</label>
+        <textarea id="observacoes" name="observacoes" required></textarea>
+      </div>
+
+      <!-- Metadados úteis -->
+      <input type="hidden" name="pagina_origem" id="pagina_origem" />
+
+      <div class="actions">
+        <button id="btnEnviar" type="submit">Enviar</button>
+        <span class="hint">* Campos obrigatórios</span>
+      </div>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <footer>
+    © BBConsultores Summit 2025
+  </footer>
+
+  <script>
+    (function(){
+      const form = document.getElementById('satisfacao-form');
+      const btn = document.getElementById('btnEnviar');
+      const status = document.getElementById('status');
+      document.getElementById('pagina_origem').value = location.href;
+
+      // Atualiza contadores 0/5
+      function bindStarCounters(){
+        const groups = [
+          'avaliacao_geral','relevancia_conteudos','qualidade_palestrantes',
+          'organizacao_logistica','coffee_almoco','infra_local',
+          'duracao_ritmo','materiais_brindes'
+        ];
+        groups.forEach(name => {
+          const radios = [...document.querySelectorAll(`input[name="${name}"]`)];
+          const counter = document.querySelector(`[data-count="${name}"]`);
+          if (!radios.length || !counter) return;
+          const update = () => {
+            const val = radios.find(r => r.checked)?.value || 0;
+            counter.textContent = `${val}/5`;
+          };
+          radios.forEach(r => r.addEventListener('change', update));
+          update();
         });
-      } else {
-        form.reportValidity();
       }
-    });
-  }
-});
-</script>
-</body><script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.querySelector("form");
-        form.addEventListener("submit", function(event) {
-            event.preventDefault();
-            form.style.display = "none";
-            const img = document.createElement("img");
-            img.src = "https://i.imgur.com/QFVL9Ms.png";
-            img.style.maxWidth = "100%";
-            document.body.appendChild(img);
-        });
-    });
-    </script></body></html>
+      bindStarCounters();
+
+      function setStatus(msg, ok){
+        status.textContent = msg;
+        status.className = 'status ' + (ok ? 'ok' : 'err');
+        status.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // validação nativa
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        btn.disabled = true; btn.textContent = 'Enviando…'; setStatus('', true); status.className = 'status';
+
+        try {
+          const formData = new FormData(form);
+          const resp = await fetch(form.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+          if (resp.ok) {
+            setStatus('✅ Obrigado! Sua resposta foi enviada com sucesso.', true);
+            form.reset();
+            bindStarCounters();
+          } else {
+            const data = await resp.json().catch(()=>({}));
+            const msg = data && data.errors ? data.errors.map(e=>e.message).join('\n') : 'Não foi possível enviar. Tente novamente.';
+            setStatus('❌ ' + msg, false);
+          }
+        } catch (err) {
+          setStatus('❌ Ocorreu um erro de rede. Verifique sua conexão e tente novamente.', false);
+        } finally {
+          btn.disabled = false; btn.textContent = 'Enviar';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
